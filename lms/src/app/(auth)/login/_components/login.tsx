@@ -10,7 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../../components/ui/card";
-import Link from "next/link";
 import { Button } from "../../../../components/ui/button";
 import { GithubIcon, Loader } from "lucide-react";
 import { FaGoogle } from "react-icons/fa";
@@ -91,10 +90,7 @@ export default function UserLogin() {
         <CardDescription>
           {" "}
           <div className="mt-3 mb-5 text-sm text-gray-500">
-            Do not have an account?{" "}
-            <Link href="/register" className="font-medium hover:underline">
-              Sign up
-            </Link>
+            Login with your Github,Google or Email Account
           </div>
         </CardDescription>
       </CardHeader>

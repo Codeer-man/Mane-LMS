@@ -4,32 +4,31 @@ import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
-import { useEffect, useState } from "react";
-import { Session, User } from "better-auth";
+// import { useEffect, useState } from "react";
+// import { Session, User } from "better-auth";
 
-type sessionProps = {
-  session: Session;
-  user: User;
-};
+// type sessionProps = {
+//   session: Session;
+//   user: User;
+// };
 
 export default function Logout() {
   const router = useRouter();
 
-  const [session, getSession] = useState<sessionProps | null>(null);
+  // const [session, getSession] = useState<sessionProps | null>(null);
 
-  useEffect(() => {
-    async function fetchSession() {
-      try {
-        const { data } = await authClient.getSession();
-        getSession(data);
-      } catch (error) {
-        console.error(error);
-        toast.error("Failed to get session");
-      }
-    }
-    fetchSession();
-  }, []);
-  console.log(session);
+  // useEffect(() => {
+  //   async function fetchSession() {
+  //     try {
+  //       const { data } = await authClient.getSession();
+  //       getSession(data);
+  //     } catch (error) {
+  //       console.error(error);
+  //       toast.error("Failed to get session");
+  //     }
+  //   }
+  //   fetchSession();
+  // }, []);
 
   async function handleLogout() {
     await authClient.signOut({
@@ -48,14 +47,9 @@ export default function Logout() {
 
   return (
     <div>
-      {session ? (
-        <div>
-          <p> {session?.user.name.charAt(0).toUpperCase()}</p>
-          <Button onClick={handleLogout}>Logout </Button>
-        </div>
-      ) : (
-        <Button onClick={() => router.push("/login")}>Logout</Button>
-      )}
+      <Button variant={"ghost"} onClick={handleLogout}>
+        Logout{" "}
+      </Button>
     </div>
   );
 }
