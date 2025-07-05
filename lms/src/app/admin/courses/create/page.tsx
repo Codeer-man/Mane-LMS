@@ -38,6 +38,7 @@ import {
   courseLevelEnum,
   courseStatus,
 } from "@/constant/createCourse";
+import { RichTextEditor } from "@/components/rich-text-editor/editro";
 
 export default function CreateCourse() {
   const form = useForm<createCourseType>({
@@ -156,11 +157,12 @@ export default function CreateCourse() {
                   <FormItem>
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Textarea
+                      {/* <Textarea
                         className="min-h-[120px]"
                         placeholder="Enter a description of your Course"
                         {...field}
-                      />
+                      /> */}
+                      <RichTextEditor field={field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

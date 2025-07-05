@@ -50,10 +50,12 @@ export default function DropDownBtn({ user }: userProps) {
           />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="max-w-64">
+      <DropdownMenuContent className="min-w-52">
         <DropdownMenuLabel className="flex min-w-0 flex-col">
           <span className="text-foreground truncate text-sm font-medium">
-            {user.name}
+            {user.name && user.name.length > 0
+              ? user.name
+              : user.email.split("@")[0]}
           </span>
           <span className="text-muted-foreground truncate text-xs font-normal">
             {user.email}
