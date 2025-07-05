@@ -1,0 +1,90 @@
+@import url("https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&family=Libertinus+Mono&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+
+@keyframes moving {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.anime {
+  display: inline-block;
+  white-space: nowrap;
+  animation-name: moving;
+  animation-duration: 80s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.wrapper {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.bgImage {
+  object-fit: cover;
+  z-index: -1;
+}
+.card {
+  position: relative;
+  width: 100%;
+  margin: 0;
+}
+
+.title {
+  font-size: 4rem;
+  font-weight: 100;
+  position: relative;
+  z-index: 10;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: Anonymous Pro;
+}
+
+.title:hover {
+  font-style: italic;
+}
+
+.hoverBox {
+  background-color: #fde047; /* yellow-200 */
+  color: black;
+  width: 100%;
+  font-size: 1.125rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -40%) scaleY(0);
+  overflow: hidden;
+  white-space: nowrap;
+  z-index: 1;
+  transition: transform 0.5s ease 0.1s;
+  pointer-events: none;
+}
+
+.blur {
+  background: yellow;
+  /* width: 40%; */
+  height: 100%;
+  position: absolute;
+  z-index: 10;
+}
+
+.card:hover .hoverBox {
+  transform: translate(-50%, -40%) scaleY(1);
+}
+
+.contentItem {
+  display: inline-block;
+  margin: 0 1.25rem;
+  font-weight: 500;
+  line-height: 1;
+}
