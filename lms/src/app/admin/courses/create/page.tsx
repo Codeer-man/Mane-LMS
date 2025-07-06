@@ -39,6 +39,7 @@ import {
   courseStatus,
 } from "@/constant/createCourse";
 import { RichTextEditor } from "@/components/rich-text-editor/editro";
+import { Uploader } from "@/components/fileUpload/uploader";
 
 export default function CreateCourse() {
   const form = useForm<createCourseType>({
@@ -157,11 +158,6 @@ export default function CreateCourse() {
                   <FormItem>
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      {/* <Textarea
-                        className="min-h-[120px]"
-                        placeholder="Enter a description of your Course"
-                        {...field}
-                      /> */}
                       <RichTextEditor field={field} />
                     </FormControl>
                     <FormMessage />
@@ -176,11 +172,12 @@ export default function CreateCourse() {
                   <FormItem>
                     <FormLabel>Course thumnail </FormLabel>
                     <FormControl>
-                      <Input
+                      {/* <Input
                         placeholder="Drag the image url"
                         type="file"
                         {...field}
-                      />
+                      /> */}
+                      <Uploader />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
