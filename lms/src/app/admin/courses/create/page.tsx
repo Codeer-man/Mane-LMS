@@ -177,7 +177,7 @@ export default function CreateCourse() {
                         type="file"
                         {...field}
                       /> */}
-                      <Uploader />
+                      <Uploader onChange={field.onChange} value={field.value} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
