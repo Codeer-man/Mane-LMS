@@ -26,15 +26,15 @@ export const coursestatusEnum = pgEnum("course_status", [
 export const courseTable = pgTable("Courses", {
   id: uuid("_id").primaryKey().defaultRandom(),
   title: varchar("title", { length: 255 }).notNull(),
-  describe: varchar("description", { length: 255 }).notNull(),
-  fileKey: text("file_key").notNull().unique(),
+  describe: text("description").notNull(),
+  filekey: text("file_key").notNull().unique(),
   price: integer("price").notNull().default(0),
-  duration: interval().default("0 hrs"),
+  duration: interval({ fields: "hour" }).default("0 hrs"),
   level: courseLevelEnum("level").notNull().default("Beginner"),
 
   category: varchar("category"),
   smallDescription: text("small_description"),
-  slug: integer("slug").unique(),
+  slug: varchar("slug", { length: 255 }).unique(),
 
   status: coursestatusEnum("status").default("Draft").notNull(),
   userId: text("user_id")

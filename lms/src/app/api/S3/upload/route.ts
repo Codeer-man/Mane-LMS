@@ -4,6 +4,8 @@ import { v4 as uuidv4 } from "uuid";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import z from "zod";
 import { s3 } from "@/lib/s3-client";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 export const fileUploadSchema = z.object({
   fileName: z.string().min(1, { message: "file name is required" }),
@@ -13,7 +15,15 @@ export const fileUploadSchema = z.object({
 });
 
 export async function POST(req: Request) {
+  const session = auth.api.getSession({
+    headers: await headers(),
+  });
+
   try {
+    if (!session) {
+      return;
+    }
+
     const body = await req.json();
 
     const validate = fileUploadSchema.safeParse(body);

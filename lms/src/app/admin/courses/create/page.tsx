@@ -9,9 +9,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { CreateCourseSchema, createCourseType } from "@/lib/zodschema";
-import { ArrowLeft, CreativeCommons, SparkleIcon } from "lucide-react";
+import { ArrowLeft, CreativeCommons, Loader2, SparkleIcon } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import React, { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -40,15 +40,20 @@ import {
 } from "@/constant/createCourse";
 import { RichTextEditor } from "@/components/rich-text-editor/editro";
 import { Uploader } from "@/components/fileUpload/uploader";
+import { CreateCourseAction } from "@/actions/course_create";
+import { useRouter } from "next/navigation";
 
 export default function CreateCourse() {
+  const router = useRouter();
+  const [isPending, startTransistion] = useTransition();
+
   const form = useForm<createCourseType>({
     resolver: zodResolver(CreateCourseSchema),
     defaultValues: {
       title: "",
       describe: "",
       category: "Web Development",
-      duration: 0,
+      duration: "",
       filekey: "",
       level: "Beginner",
       price: 0,
@@ -59,7 +64,24 @@ export default function CreateCourse() {
   });
 
   function onSubmit(value: createCourseType) {
-    console.log(value);
+    startTransistion(async () => {
+      try {
+        const result = await CreateCourseAction(value);
+
+        if (result.success === false) {
+          toast.error(result.message);
+        }
+
+        if (result.status === "success") {
+          toast.success("New Course had been created");
+          form.reset();
+          router.push("/admin/courses");
+        }
+      } catch (error) {
+        toast.error("Something went wrong");
+        return console.error(error);
+      }
+    });
   }
 
   return (
@@ -305,9 +327,18 @@ export default function CreateCourse() {
                   </FormItem>
                 )}
               />
-              <Button type="submit">
-                <CreativeCommons size={4} className=" cursor-pointer" /> Create
-                Course
+              <Button type="submit" disabled={isPending}>
+                {isPending ? (
+                  <>
+                    Creating...{" "}
+                    <Loader2 size={4} className=" animate-spin" />{" "}
+                  </>
+                ) : (
+                  <>
+                    <CreativeCommons size={4} className=" cursor-pointer" />{" "}
+                    Create Course
+                  </>
+                )}
               </Button>
             </form>
           </Form>
