@@ -78,7 +78,7 @@ export default function CreateCourse() {
           router.push("/admin/courses");
         }
       } catch (error) {
-        toast.error("Something went wrong");
+        toast.error("something went worng");
         return console.error(error);
       }
     });

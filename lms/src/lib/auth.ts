@@ -3,6 +3,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "./db";
 import { emailOTP } from "better-auth/plugins";
 import { resend } from "./resend";
+import { admin } from "better-auth/plugins";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -29,5 +30,6 @@ export const auth = betterAuth({
         });
       },
     }),
+    admin(),
   ],
 });

@@ -1,8 +1,10 @@
+import AdminRequire from "@/app/data/admin/require-admin";
 import { s3 } from "@/lib/s3-client";
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { NextResponse } from "next/server";
 
 export async function DELETE(request: Request) {
+  await AdminRequire();
   try {
     const body = await request.json();
     const key = body.key;

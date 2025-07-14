@@ -1,24 +1,28 @@
 "use server";
 
-import { auth } from "@/lib/auth";
+import AdminRequire from "@/app/data/admin/require-admin";
+
 import { db } from "@/lib/db";
 import { courseTable } from "@/lib/db/schema/course";
 import { CreateCourseSchema, createCourseType } from "@/lib/zodschema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { headers } from "next/headers";
-// import { safeParse } from "zod/v4/core";
 
 export async function CreateCourseAction(data: createCourseType) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await AdminRequire();
 
   if (!session || !session.user) {
     return {
       success: false,
       status: 401,
       message: "Please authenticate first",
+    };
+  }
+
+  if (session.user.role === "user") {
+    return {
+      success: false,
+      message: "Only Admin are allowed",
     };
   }
 
@@ -46,7 +50,6 @@ export async function CreateCourseAction(data: createCourseType) {
           "The slug already exist. Please try giving other title and genetate slug",
       };
     }
-    console.log(validate, "server");
 
     const result = await db
       .insert(courseTable)
