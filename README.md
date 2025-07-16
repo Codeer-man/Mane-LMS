@@ -19,3 +19,59 @@ Built with tools and technology
 ![Zod](https://img.shields.io/badge/Zod-3EAAAF?style=for-the-badge&logo=zod&logoColor=white)
 ![ESLint](https://img.shields.io/badge/ESLint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white)
 ![React Hook Form](https://img.shields.io/badge/React_Hook_Form-EC5990?style=for-the-badge&logo=reacthookform&logoColor=white)
+
+---
+
+# Table of Contents
+
+- [Overview](#overview)
+- [Getting Started](#getting-started)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Testing](#testing)
+
+---
+
+## Overview
+
+Brief description of the project goes here.
+
+---
+
+## Getting Started
+
+The project requires the following dependencies:
+
+- **Programming Language:** TypeScript
+- **Package Manager:** NPM
+
+### Installation
+
+Build LMS from the source and install dependencies:
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/Cooder-man/Mane-LMS.git
+```
+
+2. Navigate to Project Directories
+
+```bash
+cd Mane-LMS
+```
+
+3. Install Dependencies
+
+```bash
+npm install
+```
+
+## Usage
+
+Run the project with:
+Using npm:
+
+```bash
+npm run dev
+```

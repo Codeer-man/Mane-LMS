@@ -1,8 +1,12 @@
+import { GetAdminCourse } from "@/actions/course_create";
 import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import React from "react";
+import AdminCourse from "./_components/adminCourse";
 
-export default function CoursePage() {
+export default async function CoursePage() {
+  const data = await GetAdminCourse();
+
   return (
     <>
       <div className="flex items-center justify-between">
@@ -11,7 +15,11 @@ export default function CoursePage() {
           Create Course
         </Link>
       </div>
-      <div>Here are the courses that you created</div>
+      <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-5">
+        {data.map((course) => (
+          <AdminCourse key={course.id} data={course} />
+        ))}
+      </div>
     </>
   );
 }

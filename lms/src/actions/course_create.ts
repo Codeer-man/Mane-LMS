@@ -5,7 +5,7 @@ import AdminRequire from "@/app/data/admin/require-admin";
 import { db } from "@/lib/db";
 import { courseTable } from "@/lib/db/schema/course";
 import { CreateCourseSchema, createCourseType } from "@/lib/zodschema";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 export async function CreateCourseAction(data: createCourseType) {
@@ -56,12 +56,11 @@ export async function CreateCourseAction(data: createCourseType) {
       .values({ ...validate.data, userId: session?.user.id });
 
     revalidatePath("/admin/courses");
-    // revalidatePath("/admin/courses");
-    console.log(result);
 
     return {
       status: "success",
       message: "New Course has been created",
+      result,
     };
   } catch (error) {
     console.error(error);
@@ -71,3 +70,32 @@ export async function CreateCourseAction(data: createCourseType) {
     };
   }
 }
+
+export async function GetAdminCourse() {
+  await AdminRequire();
+
+  try {
+    const data = await db.query.courseTable.findMany({
+      orderBy: desc(courseTable.createdAt),
+      columns: {
+        id: true,
+        title: true,
+        smallDescription: true,
+        duration: true,
+        level: true,
+        status: true,
+        price: true,
+        filekey: true,
+        category: true,
+        slug: true,
+      },
+    });
+
+    return data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+
+export type AdminCourseType = Awaited<ReturnType<typeof GetAdminCourse>>;

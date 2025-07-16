@@ -34,7 +34,6 @@ export function NavUser() {
 
   const handleLogout = useSignOut();
   const { isMobile } = useSidebar();
-  console.log(session);
 
   return (
     <SidebarMenu>

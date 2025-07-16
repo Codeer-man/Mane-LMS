@@ -23,7 +23,6 @@ export default async function AuthLayout({
   if (session && session.user) {
     return redirect("/");
   }
-  console.log(session);
 
   return (
     <div>

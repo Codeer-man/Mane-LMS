@@ -29,20 +29,20 @@ export const courseTable = pgTable("Courses", {
   describe: text("description").notNull(),
   filekey: text("file_key").notNull().unique(),
   price: integer("price").notNull().default(0),
-  duration: interval({ fields: "hour" }).default("0 hrs"),
+  duration: interval({ fields: "hour" }).default("0 hrs").notNull(),
   level: courseLevelEnum("level").notNull().default("Beginner"),
 
-  category: varchar("category"),
-  smallDescription: text("small_description"),
-  slug: varchar("slug", { length: 255 }).unique(),
+  category: varchar("category").notNull(),
+  smallDescription: text("small_description").notNull(),
+  slug: varchar("slug", { length: 255 }).unique().notNull(),
 
   status: coursestatusEnum("status").default("Draft").notNull(),
   userId: text("user_id")
     .references(() => user.id, { onDelete: "cascade" })
     .notNull(),
 
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 // relation user course
