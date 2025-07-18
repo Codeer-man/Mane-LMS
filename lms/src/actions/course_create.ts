@@ -7,6 +7,7 @@ import { courseTable } from "@/lib/db/schema/course";
 import { CreateCourseSchema, createCourseType } from "@/lib/zodschema";
 import { desc, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { notFound } from "next/navigation";
 
 export async function CreateCourseAction(data: createCourseType) {
   const session = await AdminRequire();
@@ -99,3 +100,27 @@ export async function GetAdminCourse() {
 }
 
 export type AdminCourseType = Awaited<ReturnType<typeof GetAdminCourse>>;
+
+export async function EditCourse(id: string) {
+  await AdminRequire();
+
+  try {
+    const data = await db
+      .select()
+      .from(courseTable)
+      .where(eq(courseTable.id, id))
+      .limit(1);
+
+    if (data.length === 0) {
+      return notFound();
+    }
+    console.log(data);
+
+    return data[0];
+  } catch (error) {
+    console.error(error);
+    return;
+  }
+}
+
+export type getSingleCourse = Awaited<ReturnType<typeof EditCourse>>;

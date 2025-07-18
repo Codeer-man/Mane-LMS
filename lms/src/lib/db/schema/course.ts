@@ -9,7 +9,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import { user } from "./auth";
-import { relations } from "drizzle-orm";
+import { InferSelectModel, relations } from "drizzle-orm";
 
 export const courseLevelEnum = pgEnum("course_level", [
   "Beginner",
@@ -23,6 +23,18 @@ export const coursestatusEnum = pgEnum("course_status", [
   "Archived",
 ]);
 
+export const courseCategoriesEnum = pgEnum("course_category", [
+  "Web Development",
+  "Data Science",
+  "Mobile App Development",
+  "UI/UX Design",
+  "Cybersecurity",
+  "Artificial Intelligence",
+  "Cloud Computing",
+  "Digital Marketing",
+  "Game Development",
+  "Blockchain Technology",
+]);
 export const courseTable = pgTable("Courses", {
   id: uuid("_id").primaryKey().defaultRandom(),
   title: varchar("title", { length: 255 }).notNull(),
@@ -32,7 +44,7 @@ export const courseTable = pgTable("Courses", {
   duration: interval({ fields: "hour" }).default("0 hrs").notNull(),
   level: courseLevelEnum("level").notNull().default("Beginner"),
 
-  category: varchar("category").notNull(),
+  category: courseCategoriesEnum("category").notNull(),
   smallDescription: text("small_description").notNull(),
   slug: varchar("slug", { length: 255 }).unique().notNull(),
 
@@ -44,6 +56,8 @@ export const courseTable = pgTable("Courses", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
+
+export type CourseSchemaType = InferSelectModel<typeof courseTable>;
 
 // relation user course
 export const userRelation = relations(user, ({ many }) => ({
