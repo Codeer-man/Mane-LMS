@@ -53,7 +53,7 @@ export default function CreateCourse() {
       title: "",
       describe: "",
       category: "Web Development",
-      duration: "",
+      duration: 0,
       filekey: "",
       level: "Beginner",
       price: 0,
@@ -64,6 +64,8 @@ export default function CreateCourse() {
   });
 
   function onSubmit(value: createCourseType) {
+    console.log(value, "value");
+
     startTransistion(async () => {
       try {
         const result = await CreateCourseAction(value);
@@ -74,7 +76,6 @@ export default function CreateCourse() {
 
         if (result.status === "success") {
           toast.success("New Course had been created");
-          form.reset();
           router.push("/admin/courses");
         }
       } catch (error) {

@@ -52,7 +52,7 @@ export async function CreateCourseAction(data: createCourseType) {
       };
     }
 
-    const result = await db
+    await db
       .insert(courseTable)
       .values({ ...validate.data, userId: session?.user.id });
 
@@ -61,7 +61,6 @@ export async function CreateCourseAction(data: createCourseType) {
     return {
       status: "success",
       message: "New Course has been created",
-      result,
     };
   } catch (error) {
     console.error(error);
@@ -105,20 +104,42 @@ export async function EditCourse(id: string) {
   await AdminRequire();
 
   try {
-    const data = await db
-      .select()
-      .from(courseTable)
-      .where(eq(courseTable.id, id))
-      .limit(1);
+    //   const course = await db.query.courseTable.findFirst({
+    //     where: (course, { eq }) => eq(course.id, id),
+    //   });
+    const course = await db.query.courseTable.findFirst({
+      where: eq(courseTable.id, id),
+      with: {
+        chapters: {
+          columns: {
+            id: true,
+            position: true,
+            title: true,
+          },
+          with: {
+            lessons: {
+              columns: {
+                id: true,
+                title: true,
+                description: true,
+                thumnailKey: true,
+                position: true,
+                videoKey: true,
+              },
+            },
+          },
+        },
+      },
+    });
 
-    if (data.length === 0) {
+    if (!course) {
       return notFound();
     }
-    console.log(data);
+    console.log(course, "actionP");
 
-    return data[0];
+    return course;
   } catch (error) {
-    console.error(error);
+    console.error("Failed to fetch course:", error);
     return;
   }
 }

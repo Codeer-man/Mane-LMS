@@ -27,7 +27,7 @@ interface UploaderState {
 }
 
 interface IAppProps {
-  value?: string;
+  value: string;
   onChange?: (value: string) => void;
 }
 
@@ -76,7 +76,6 @@ export function Uploader({ onChange, value }: IAppProps) {
         }));
         return;
       }
-      console.log(presignedResponse, "preseign url");
 
       const { presignedUrl, Key } = await presignedResponse.json();
 
@@ -173,8 +172,6 @@ export function Uploader({ onChange, value }: IAppProps) {
   }
 
   function RenderContent() {
-    console.log(filestate);
-
     if (filestate.error) {
       return <RenderError />;
     }

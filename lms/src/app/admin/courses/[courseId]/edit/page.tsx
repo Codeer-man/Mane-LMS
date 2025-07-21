@@ -9,6 +9,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import React from "react";
 import EditCourseForm from "./_components/editCourseForm";
+import CourseStructure from "./_components/courseStructure";
 
 export default async function page({
   params,
@@ -18,6 +19,7 @@ export default async function page({
   const { courseId } = await params;
 
   const data = await EditCourse(courseId);
+  console.log(data, "page");
 
   return (
     <div>
@@ -41,6 +43,18 @@ export default async function page({
             </CardHeader>
             <CardContent>
               <EditCourseForm data={data} />
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="course-structure">
+          <Card>
+            <CardHeader>
+              <CardTitle>Course Structure</CardTitle>
+              <CardDescription>Update the course Structure</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {/* <EditCourseForm data={data} /> */}
+              <CourseStructure data={data} />
             </CardContent>
           </Card>
         </TabsContent>

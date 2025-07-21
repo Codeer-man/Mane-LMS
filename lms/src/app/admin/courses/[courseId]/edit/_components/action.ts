@@ -32,3 +32,7 @@ export async function EditCourse(data: createCourseType, id: string) {
     return;
   }
 }
+
+export async function GetChapter() {
+    
+}

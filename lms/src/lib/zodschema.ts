@@ -10,7 +10,7 @@ export const CreateCourseSchema = z.object({
   describe: z.string().min(5, { message: "At least 5 word is required" }),
   filekey: z.string({ message: "File key is required" }),
   price: z.coerce.number(),
-  duration: z.string(),
+  duration: z.coerce.number(),
   level: z.enum(courseLevelEnum.enumValues),
   category: z.enum(courseCategories, { message: "Category is required" }),
   smallDescription: z.string(),

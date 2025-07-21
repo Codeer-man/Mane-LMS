@@ -1,0 +1,5 @@
+
+
+dnd kit for drag and drop the course structure 
+@dnd-kit/core for installation 
+@dnd-core/sortabler for sorting them
