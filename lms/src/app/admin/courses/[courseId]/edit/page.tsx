@@ -19,7 +19,6 @@ export default async function page({
   const { courseId } = await params;
 
   const data = await EditCourse(courseId);
-  console.log(data, "page");
 
   return (
     <div>

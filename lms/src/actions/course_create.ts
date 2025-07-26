@@ -135,7 +135,6 @@ export async function EditCourse(id: string) {
     if (!course) {
       return notFound();
     }
-    console.log(course, "actionP");
 
     return course;
   } catch (error) {

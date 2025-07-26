@@ -2,9 +2,12 @@
 
 import AdminRequire from "@/app/data/admin/require-admin";
 import { db } from "@/lib/db";
+import { chapterTable } from "@/lib/db/schema/chapter";
 import { courseTable } from "@/lib/db/schema/course";
+import { lessonTable } from "@/lib/db/schema/lesson";
 import { CreateCourseSchema, createCourseType } from "@/lib/zodschema";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 export async function EditCourse(data: createCourseType, id: string) {
   await AdminRequire();
@@ -33,6 +36,88 @@ export async function EditCourse(data: createCourseType, id: string) {
   }
 }
 
-export async function GetChapter() {
-    
+export async function reorderLessonFunction(
+  chapterId: string,
+  lessons: { id: string; position: number }[],
+  courseId: string
+) {
+  await AdminRequire();
+  try {
+    if (!lessons || lessons.length === 0) {
+      return {
+        status: "error",
+        message: "No lessons provided for reordering",
+      };
+    }
+
+    const updates = lessons.map((lesson) =>
+      db
+        .update(lessonTable)
+        .set({
+          position: lesson.position,
+        })
+        .where(
+          and(
+            eq(lessonTable.id, lesson.id),
+            eq(lessonTable.chapterId, chapterId)
+          )
+        )
+    );
+
+    await Promise.all(updates);
+
+    revalidatePath(`/admin/courses/${courseId}/edit`);
+
+    return {
+      status: "success",
+      message: "Lesson reordered successfully",
+    };
+  } catch (error) {
+    return {
+      status: "error",
+      message: error,
+    };
+  }
+}
+
+export async function reorderChapterFunction(
+  courseId: string,
+  chapters: { id: string; position: number }[]
+) {
+  await AdminRequire();
+  try {
+    if (!chapters || chapters.length === 0) {
+      return {
+        status: "error",
+        message: "No chapters provided",
+      };
+    }
+
+    const update = chapters.map((chapter) =>
+      db
+        .update(chapterTable)
+        .set({
+          position: chapter.position,
+        })
+        .where(
+          and(
+            eq(chapterTable.id, chapter.id),
+            eq(chapterTable.courseId, courseId)
+          )
+        )
+    );
+
+    await Promise.all(update);
+    revalidatePath(`/admin/courses/${courseId}/edit`);
+
+    return {
+      status: "success",
+      message: "chapter reordered successfully",
+    };
+  } catch (error) {
+    return {
+      status: "error",
+      message: error || "failed to reorder the chapter",
+    };
+  }
 }
