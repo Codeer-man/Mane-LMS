@@ -39,6 +39,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { reorderChapterFunction, reorderLessonFunction } from "./action";
+import NewChapterModel from "./NewChapterModel";
 
 interface iAppProps {
   data: getSingleCourse;
@@ -48,7 +49,7 @@ interface sortableItemsProps {
   id: string;
   children: (listeners: DraggableSyntheticListeners) => React.ReactNode;
   className?: string;
-  data?: {
+  data: {
     type: "chapter" | "lesson";
     chapterId: string;
   };
@@ -291,6 +292,7 @@ export default function CourseStructure({ data }: iAppProps) {
       <Card>
         <CardHeader className=" flex flex-row items-center justify-between border-b border-border">
           <CardTitle className="">Chapter</CardTitle>
+          <NewChapterModel courseId={data?.id} />
         </CardHeader>
         <CardContent className=" space-y-6">
           <SortableContext strategy={verticalListSortingStrategy} items={items}>

@@ -19,3 +19,12 @@ export const CreateCourseSchema = z.object({
 });
 
 export type createCourseType = z.infer<typeof CreateCourseSchema>;
+
+export const CreateChapterSchema = z.object({
+  name: z
+    .string()
+    .min(3, { message: "name must be at a least 3 chatacter long" }),
+  courseId: z.string().uuid({ message: "Invalid coutse id" }),
+});
+
+export type createChapterType = z.infer<typeof CreateChapterSchema>;

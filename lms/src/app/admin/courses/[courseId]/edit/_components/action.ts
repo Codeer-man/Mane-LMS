@@ -5,8 +5,13 @@ import { db } from "@/lib/db";
 import { chapterTable } from "@/lib/db/schema/chapter";
 import { courseTable } from "@/lib/db/schema/course";
 import { lessonTable } from "@/lib/db/schema/lesson";
-import { CreateCourseSchema, createCourseType } from "@/lib/zodschema";
-import { and, eq } from "drizzle-orm";
+import {
+  CreateChapterSchema,
+  createChapterType,
+  CreateCourseSchema,
+  createCourseType,
+} from "@/lib/zodschema";
+import { and, desc, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 export async function EditCourse(data: createCourseType, id: string) {
@@ -118,6 +123,48 @@ export async function reorderChapterFunction(
     return {
       status: "error",
       message: error || "failed to reorder the chapter",
+    };
+  }
+}
+
+export async function createChapter(value: createChapterType) {
+  await AdminRequire();
+  try {
+    const result = CreateChapterSchema.safeParse(value);
+
+    if (!result.success) {
+      return {
+        status: "error",
+        message: "Invalid data",
+      };
+    }
+
+    const maxPos = await db
+      .select({ position: chapterTable.position })
+      .from(chapterTable)
+      .where(eq(chapterTable.courseId, result.data.courseId))
+      .orderBy(desc(chapterTable.position))
+      .limit(1);
+
+    console.log(maxPos);
+    const maxPosition = maxPos[0]?.position ?? 0;
+
+    await db.insert(chapterTable).values({
+      title: result.data.name,
+      position: maxPosition + 1,
+      courseId: result.data.courseId,
+    });
+
+    revalidatePath(`/admin/course/${result.data.courseId}/edit`);
+
+    return {
+      status: "success",
+      message: "New Chapter has been added",
+    };
+  } catch (error) {
+    return {
+      status: "error",
+      message: error,
     };
   }
 }
