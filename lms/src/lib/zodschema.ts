@@ -28,3 +28,19 @@ export const CreateChapterSchema = z.object({
 });
 
 export type createChapterType = z.infer<typeof CreateChapterSchema>;
+
+export const createLessonValidation = z.object({
+  name: z
+    .string()
+    .min(3, { message: "name must be at a least 3 chatacter long" }),
+  courseId: z.string().uuid({ message: "Invalid course Id" }),
+  chapterId: z.string().uuid({ message: "Invalid chapter Id" }),
+  description: z
+    .string()
+    .min(5, { message: "There must be at least 5 words" })
+    .optional(),
+  thumnailKey: z.string().optional(),
+  videoKey: z.string().optional(),
+});
+
+export type lessonCreationType = z.infer<typeof createLessonValidation>;

@@ -40,6 +40,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { reorderChapterFunction, reorderLessonFunction } from "./action";
 import NewChapterModel from "./NewChapterModel";
+import NewLessonCreation from "./LessonCreation";
 
 interface iAppProps {
   data: getSingleCourse;
@@ -367,9 +368,13 @@ export default function CourseStructure({ data }: iAppProps) {
                             ))}
                           </SortableContext>
                           <div className=" p-2 ">
-                            <Button variant={"outline"} className=" w-full">
+                            <NewLessonCreation
+                              chapterId={items.id}
+                              courseId={data?.id}
+                            />
+                            {/* <Button variant={"outline"} className=" w-full">
                               Create a New Lesson
-                            </Button>
+                            </Button> */}
                           </div>
                         </div>
                       </CollapsibleContent>

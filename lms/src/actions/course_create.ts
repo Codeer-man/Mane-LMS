@@ -104,9 +104,6 @@ export async function EditCourse(id: string) {
   await AdminRequire();
 
   try {
-    //   const course = await db.query.courseTable.findFirst({
-    //     where: (course, { eq }) => eq(course.id, id),
-    //   });
     const course = await db.query.courseTable.findFirst({
       where: eq(courseTable.id, id),
       with: {

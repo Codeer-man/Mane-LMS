@@ -10,6 +10,8 @@ import {
   createChapterType,
   CreateCourseSchema,
   createCourseType,
+  createLessonValidation,
+  lessonCreationType,
 } from "@/lib/zodschema";
 import { and, desc, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
@@ -146,7 +148,6 @@ export async function createChapter(value: createChapterType) {
       .orderBy(desc(chapterTable.position))
       .limit(1);
 
-    console.log(maxPos);
     const maxPosition = maxPos[0]?.position ?? 0;
 
     await db.insert(chapterTable).values({
@@ -165,6 +166,47 @@ export async function createChapter(value: createChapterType) {
     return {
       status: "error",
       message: error,
+    };
+  }
+}
+
+export async function createLesson(value: lessonCreationType) {
+  await AdminRequire();
+  try {
+    const result = createLessonValidation.safeParse(value);
+
+    if (!result.success) {
+      return {
+        status: "error",
+        message: "validation failed",
+      };
+    }
+
+    const maxPos = await db
+      .select({ position: lessonTable.position })
+      .from(lessonTable)
+      .where(eq(lessonTable.chapterId, result.data.chapterId))
+      .orderBy(desc(lessonTable.position))
+      .limit(1);
+
+    const maxPosition = maxPos[0]?.position ?? 0;
+
+    await db.insert(lessonTable).values({
+      title: result.data.name,
+      description: result.data.description,
+      position: maxPosition + 1,
+      thumnailKey: result.data.thumnailKey,
+      videoKey: result.data.videoKey,
+      chapterId: result.data.chapterId,
+    });
+
+    revalidatePath(`/admin/course/${result.data.courseId}/edit`);
+  } catch (error) {
+    console.error(error);
+
+    return {
+      status: "error",
+      message: "something went wrong",
     };
   }
 }

@@ -16,36 +16,43 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { CreateChapterSchema, createChapterType } from "@/lib/zodschema";
+import { createLessonValidation } from "@/lib/zodschema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Plus } from "lucide-react";
 import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { createChapter } from "./action";
+import { createLesson } from "./action";
 import { toast } from "sonner";
+import { lessonCreationType } from "@/lib/zodschema";
 
-export default function NewChapterModel({
+export default function NewLessonCreation({
   courseId,
+  chapterId,
 }: {
   courseId: string | undefined;
+  chapterId: string;
 }) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [pending, startTransistion] = useTransition();
 
-  const form = useForm<createChapterType>({
-    resolver: zodResolver(CreateChapterSchema),
+  const form = useForm<lessonCreationType>({
+    resolver: zodResolver(createLessonValidation),
     defaultValues: {
       name: "",
       courseId: courseId,
+      chapterId: chapterId,
     },
   });
 
-  async function onSubmit(values: createChapterType) {
+  async function onSubmit(values: lessonCreationType) {
     startTransistion(async () => {
       try {
-        const data = await createChapter(values);
-      
+        const data = await createLesson(values);
+
+        if (!data) {
+          return;
+        }
 
         if (data.status === "error") {
           toast.error(data?.message as string);
@@ -71,8 +78,8 @@ export default function NewChapterModel({
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button size={"sm"} variant={"outline"}>
-          <Plus /> New Chapter
+        <Button className=" gap-1 w-full justify-center cursor-pointer">
+          <Plus /> New Lesson
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">

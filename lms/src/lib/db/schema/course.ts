@@ -10,6 +10,7 @@ import {
 import { user } from "./auth";
 import { InferSelectModel, relations } from "drizzle-orm";
 import { chapterTable } from "./chapter";
+import { lessonTable } from "./lesson";
 
 export const courseLevelEnum = pgEnum("course_level", [
   "Beginner",
@@ -64,6 +65,7 @@ export const courseRelations = relations(courseTable, ({ one, many }) => ({
     references: [user.id],
   }),
   chapters: many(chapterTable),
+  lessons: many(lessonTable),
 }));
 
 export const userRelations = relations(user, ({ many }) => ({
